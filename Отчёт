@@ -1,0 +1,81 @@
++-----------------+        +-----------------------------+       +------------------------+
+|     Cell        |        |   GameObject                |       |   GameBoard            |
++-----------------+        +-----------------------------+       +------------------------+
+| - x: int        |        | - position: Cell            |       | - board: GameObject**  |
+| - y: int        |        | - type: char                |       | - width: int           |
++-----------------+        +-----------------------------+       | - height: int          |
+| + Cell(int, int)|        | + GameObject(int, int, char)|       | + GameBoard(int, int)  |
+| + getX(): int   |        | + getType(): char |         |       | + displayBoard(): void |
+| + getY(): int   |        | + getPosition(): Cell |     |       | + ~GameBoard()         |
++-----------------+        +-----------------------------+       +------------------------+
+                                                         
+                                                         
+                                                         
++-------------------------+     +-------------------------------+      
+|     Player              |     |      Game                     |
++-------------------------+     +-------------------------------+         
+| - name: char[]          |     | - board: GameBoard*           |     
+| - score: int            |     | - player: Player*             |        
++-------------------------+     | - isGameOver: bool            |        
+| + Player(const char*)   |     | + Game(int, int, const char*) |
+| + getName(): const char*|     | + ~Game()                     |
+| + getScore(): int       |     | + display(): void             |
++-------------------------+     | + makeMove(Cell, Cell): void  |
+                                | + checkWin(): bool            |
+                                +-------------------------------+
+
+"-" - это атрибуты
+"+" - это методы
+
+__Другая форма:__
+
+Описание классов:
+--Класс Cell--
+Атрибуты:
+x: int — координата по оси X.
+y: int — координата по оси Y.
+Методы:
+Cell(int x, int y) — конструктор для установки координат.
+getX(): int — возвращает координату X.
+getY(): int — возвращает координату Y.
+
+--Класс GameObject--
+Атрибуты:
+position: Cell — позиция объекта (экземпляр класса Cell).
+type: char — тип игрового объекта (символ).
+Методы:
+GameObject(int x, int y, char type) — конструктор для инициализации позиции и типа.
+getType(): char — возвращает тип объекта.
+getPosition(): Cell — возвращает позицию объекта.
+
+--Класс GameBoard--
+Атрибуты:
+board: GameObject** — динамический массив указателей на объекты GameObject.
+width: int — ширина игрового поля.
+height: int — высота игрового поля.
+Методы:
+GameBoard(int width, int height) — конструктор для инициализации поля и заполнения его объектами.
+~GameBoard() — деструктор для освобождения памяти.
+displayBoard(): void — отображает игровое поле.
+getCell(int x, int y): GameObject* — возвращает указатель на объект в заданной ячейке.
+
+--Класс Player--
+Атрибуты:
+name: char[] — имя игрока.
+score: int — счет игрока.
+Методы:
+Player(const char* name) — конструктор для инициализации имени.
+getName(): const char* — возвращает имя игрока.
+getScore(): int — возвращает счет игрока.
+
+--Класс Game--
+Атрибуты:
+board: GameBoard* — указатель на объект GameBoard.
+player: Player* — указатель на объект Player.
+isGameOver: bool — состояние игры (завершена или нет).
+Методы:
+Game(int width, int height, const char* playerName) — конструктор для инициализации игры.
+~Game() — деструктор для освобождения памяти.
+display(): void — отображает информацию о игре и игровом поле.
+makeMove(Cell from, Cell to): void — выполняет ход, перемещая объект.
+checkWin(): bool — проверяет наличие победителя.
