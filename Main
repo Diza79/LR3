@@ -1,0 +1,138 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+class Cell {
+private:
+    int x; // Координата по оси X
+    int y; // Координата по оси Y
+
+public:
+    Cell(int x = 0, int y = 0) : x(x), y(y) {}
+
+    int getX() const { return x; }
+    int getY() const { return y; }
+};
+
+class GameObject {
+private:
+    Cell position; // Позиция клетки
+    char type; // Тип игрового объекта
+
+public:
+    GameObject(int x, int y, char type) : position(x, y), type(type) {}
+
+    char getType() const { return type; }
+    Cell getPosition() const { return position; }
+};
+
+class GameBoard {
+private:
+    GameObject** board; // Динамический массив игрового поля
+    int width;
+    int height;
+
+public:
+    GameBoard(int width, int height) : width(width), height(height) {
+        board = new GameObject*[height];
+        for (int i = 0; i < height; i++) {
+            board[i] = new GameObject*[width];
+            for (int j = 0; j < width; j++) {
+                board[i][j] = GameObject(i, j, 'A' + (rand() % 3)); // Заполнение случайными типами
+            }
+        }
+    }
+
+    ~GameBoard() {
+        for (int i = 0; i < height; i++) {
+            delete[] board[i];
+        }
+        delete[] board;
+    }
+
+    void displayBoard() const {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                cout << board[i][j].getType() << " ";
+            }
+            cout << endl;
+        }
+    }
+
+    GameObject* getCell(int x, int y) {
+        return &board[x][y];
+    }
+};
+
+class Player {
+private:
+    char name[50];
+    int score;
+
+public:
+    Player(const char* name) {
+        strcpy(this->name, name);
+        score = 0;
+    }
+
+    const char* getName() const { return name; }
+    int getScore() const { return score; }
+};
+
+class Game {
+private:
+    GameBoard* board; // Указатель на игровое поле
+    Player* player; // Указатель на игрока
+    bool isGameOver;
+
+public:
+    Game(int width, int height, const char* playerName) {
+        board = new GameBoard(width, height);
+        player = new Player(playerName);
+        isGameOver = false;
+    }
+
+    ~Game() {
+        delete board;
+        delete player;
+    }
+
+    void display() {
+        cout << "Игрок: " << player->getName() << endl;
+        cout << "Игровое поле:" << endl;
+        board->displayBoard();
+    }
+
+    void makeMove(Cell from, Cell to) {
+        // Простая логика перемещения объектов
+        GameObject temp = *board->getCell(from.getX(), from.getY());
+        *board->getCell(from.getX(), from.getY()) = *board->getCell(to.getX(), to.getY());
+        *board->getCell(to.getX(), to.getY()) = temp;
+    }
+
+    bool checkWin() {
+        // Проверка на победу (заглушка)
+        return false;
+    }
+};
+
+int main() {
+    // Динамический массив объектов класса Game
+    const int numGames = 2;
+    Game** games = new Game*[numGames];
+
+    // Создание объектов Game в динамическом массиве
+    for (int i = 0; i < numGames; i++) {
+        games[i] = new Game(10, 10, "Игрок " + to_string(i + 1));
+        games[i]->display();
+    }
+
+    // Освобождение памяти
+    for (int i = 0; i < numGames; i++) {
+        delete games[i];
+    }
+    delete[] games;
+
+    return 0;
+}
